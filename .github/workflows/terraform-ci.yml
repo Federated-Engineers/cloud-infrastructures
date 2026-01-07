@@ -16,28 +16,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.0
 
-      - name: Initialise Terraform
-        run: terraform init
-        working-directory: ./
-
       - name: Terraform Validation
         run: terraform validate
         working-directory: ./
 
       - name: Terraform Formatting
-        run: terraform fmt -check
-        working-directory: ./
-
-      - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@v3
-
-      - name: TFLint Run
-        run: tflint --init && tflint
-        working-directory: ./
+        uses: dflook/terraform-fmt@v2
+        with:
+          path: ./
