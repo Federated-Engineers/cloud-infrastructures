@@ -86,24 +86,21 @@ resource "aws_route_table" "public-rtb" {
     })
 }
 
-# # Private route tables using for_each
-# resource "aws_route_table" "private-rtb" {
-#   for_each = var.private_route_tables
+# Private route tables using for_each private subnets
+resource "aws_route_table" "private-rtb" {
+  for_each = var.private_route_tables
 
-#   vpc_id = aws_vpc.federated-engineers-vpc.id
+  vpc_id = aws_vpc.federated-engineers-vpc.id
 
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     nat_gateway_id = aws_nat_gateway.nat_public1.id
-#   }
-
-#   tags = merge(local.common_tags, {
-#     
-    # tags = merge(local.common_tags, {
-    # Name    = "${var.project_name}-private-rtb-${each.key}"
-    # })
-#   })
-# }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   nat_gateway_id = aws_nat_gateway.nat_public1.id
+  # }
+    
+    tags = merge(local.common_tags, {
+    Name    = "${var.project_name}-private-rtb-${each.key}"
+    })
+  }
 
 # Associations
 # Public subnet associations
@@ -114,13 +111,13 @@ resource "aws_route_table_association" "public_subnet_associations" {
   route_table_id = aws_route_table.public-rtb.id
 }
 
-# # Private subnet associations
-# resource "aws_route_table_association" "private_subnet_associations" {
-#   for_each = aws_subnet.private-subnet
+# Private subnet associations
+resource "aws_route_table_association" "private_subnet_associations" {
+  for_each = aws_subnet.private-subnet
 
-#   subnet_id      = each.value.id
-#   route_table_id = aws_route_table.private[each.key].id
-# }
+  subnet_id      = each.value.id
+  route_table_id = aws_route_table.private-rtb[each.key].id
+}
 
 # Security Group for VPC 
 resource "aws_security_group" "federated-engineers-vpc_sg" {
@@ -136,13 +133,13 @@ resource "aws_security_group" "federated-engineers-vpc_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    description = "All traffic from anywhere"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   description = "All traffic from anywhere"
+  #   from_port   = 0
+  #   to_port     = 0
+  #   protocol    = "-1"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
   egress {
     description = "Allow all outbound"
@@ -152,7 +149,20 @@ resource "aws_security_group" "federated-engineers-vpc_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-    tags = merge(local.common_tags, {
-    Name    = "${var.project_name}-sg"
-    })
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-sg"
+  })
+}
+
+
+# VPC Gateway Endpoint for S3 (attached to private route tables)
+resource "aws_vpc_endpoint" "s3_gateway" {
+  vpc_id            = aws_vpc.federated-engineers-vpc.id
+  service_name      = "com.amazonaws.${var.region}.s3"
+  vpc_endpoint_type = "Gateway"
+  route_table_ids   = [for rtb_key, rtb in aws_route_table.private-rtb : rtb.id]
+
+  tags = merge(local.common_tags, {
+    Name = "${var.project_name}-s3-endpoint"
+  })
 }
