@@ -1,6 +1,6 @@
 name: CI pipeline
 on:
-  push:
+  pull_request:
     paths:
       - "**.tf"
 jobs:
