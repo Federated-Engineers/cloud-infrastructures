@@ -1,8 +1,12 @@
-data "aws_vpc" "test-vpc-before-AK-vpc" {
+data "aws_vpc" "federated-engineers-vpc" {
   id = var.vpc_id
 }
 
-data "aws_subnet" "test-vpc-before-AK-subnet-public1-eu-central-1a" {
+data "aws_subnet" "private-subnet" {
+  id = var.subnet_id
+}
+
+data "aws_subnet" "public-subnet" {
   id = var.subnet_id
 }
 
