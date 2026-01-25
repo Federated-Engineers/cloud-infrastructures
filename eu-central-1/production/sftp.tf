@@ -15,7 +15,7 @@ resource "aws_vpc_security_group_ingress_rule" "allow_access" {
   to_port           = 22
 }
 
-resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+resource "aws_vpc_security_group_egress_rule" "allow_all_ipv4_traffic" {
   security_group_id = aws_security_group.sftp-SG.id
   cidr_ipv4         = "0.0.0.0/0"
   ip_protocol       = "-1"
