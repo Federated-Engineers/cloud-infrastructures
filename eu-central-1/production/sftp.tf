@@ -1,6 +1,6 @@
 resource "aws_security_group" "sftp-SG" {
   name   = "sftp-SG"
-  vpc_id = data.aws_vpc.test-vpc-before-AK-vpc.id
+  vpc_id = data.aws_vpc.federated-engineers-vpc.id
 
   tags = {
     Description = "SG for sftp"
@@ -25,8 +25,8 @@ resource "aws_transfer_server" "Federated-engineers-sftp" {
   endpoint_type = "PUBLIC"
 
   endpoint_details {
-    subnet_ids         = [data.aws_subnet.test-vpc-before-AK-subnet-public1-eu-central-1a.id]
-    vpc_id             = data.aws_vpc.test-vpc-before-AK-vpc.id
+    subnet_ids         = [data.aws_subnet.public-subnet.id]
+    vpc_id             = data.aws_vpc.federated-engineers-vpc.id
     security_group_ids = [aws_security_group.sftp-SG.id]
   }
 
