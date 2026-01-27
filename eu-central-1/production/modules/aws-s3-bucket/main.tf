@@ -7,8 +7,8 @@ resource "random_id" "bucket_suffix" {
 resource "aws_s3_bucket" "federated-engineers-bucket" {
   bucket = lower("${var.team != "" ? var.team : "federated-engineers"}-${random_id.bucket_suffix.hex}")
 
-  tags = merge(local.common_tags, { 
-    Name = "federated-engineers-bucket" 
+  tags = merge(local.common_tags, {
+    Name = "federated-engineers-bucket"
   })
 }
 
@@ -33,8 +33,8 @@ resource "aws_s3_bucket_lifecycle_configuration" "s3-lifecycle-configuration" {
 
     # Transition objects to Intelligent-Tiering after 0 days
     transition {
-      storage_class          = "INTELLIGENT_TIERING"
-      days                   = 0
+      storage_class = "INTELLIGENT_TIERING"
+      days          = 0
     }
 
     # Delete old versions after 90 days
