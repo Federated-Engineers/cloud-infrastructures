@@ -62,12 +62,12 @@ resource "aws_subnet" "private-c" {
 resource "aws_internet_gateway" "gateway" {
   vpc_id = aws_vpc.federated-engineers-vpc.id
 
-  tags = merge(local.common_tags, { Name = "vpc-internet-gateway" })
+  tags = merge(local.common_tags, { Name = "secure-production-internet-gateway" })
 }
 
 resource "aws_route_table" "public-subnet-rtb" {
   vpc_id = aws_vpc.federated-engineers-vpc.id
-  tags   = merge(local.common_tags, { Name = "vpc-public-subnet-rtb" })
+  tags   = merge(local.common_tags, { Name = "secure-production-public-subnet-rtb" })
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -92,7 +92,7 @@ resource "aws_route_table_association" "public-rtb-c" {
 
 resource "aws_route_table" "private-subnet-rtb" {
   vpc_id = aws_vpc.federated-engineers-vpc.id
-  tags   = merge(local.common_tags, { Name = "vpc-private-subnet-rtb" })
+  tags   = merge(local.common_tags, { Name = "secure-production-private-subnet-rtb" })
 }
 
 resource "aws_route_table_association" "private-rtb-a" {
@@ -115,7 +115,7 @@ resource "aws_security_group" "sg" {
   description = "Security Group for the VPC"
   vpc_id      = aws_vpc.federated-engineers-vpc.id
 
-  tags = merge(local.common_tags, { Name = "vpc-sg" })
+  tags = merge(local.common_tags, { Name = "secure-production-sg" })
 }
 
 resource "aws_vpc_security_group_egress_rule" "sg-egress" {
