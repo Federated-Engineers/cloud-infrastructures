@@ -21,3 +21,24 @@ variable "project" {
   type        = string
   default     = "Federated-Engineers"
 }
+
+variable "eks_version" {
+  type        = string
+  default     = "1.32"
+  description = "EKS version"
+}
+
+variable "cidr_block" {
+  type    = string
+  default = "10.10.0.0/16"
+
+}
+
+variable "tags" {
+  type = map(string)
+  default = {
+    terraform  = "true"
+    kubernetes = "federated-eks-cluster"
+  }
+  description = "Tags to apply to all resources"
+}
