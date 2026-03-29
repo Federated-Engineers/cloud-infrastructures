@@ -24,7 +24,7 @@ variable "project" {
 
 variable "eks_version" {
   type        = string
-  default     = "1.32"
+  default     = "1.34"
   description = "EKS version"
 }
 
