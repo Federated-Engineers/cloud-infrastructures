@@ -24,7 +24,11 @@ variable "project" {
 
 variable "eks_version" {
   type        = string
+<<<<<<< HEAD
   default     = "1.34"
+=======
+  default     = "1.35"
+>>>>>>> d61ce73 (changed k8s version)
   description = "EKS version"
 }
 
