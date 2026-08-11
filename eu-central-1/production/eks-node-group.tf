@@ -42,7 +42,7 @@
 #     min_size     = 1
 #   }
 
-#   instance_types = ["c5n.xlarge", "c5.xlarge", "c7i.xlarge"]
+#   instance_types = ["c5n.xlarge", "c5.xlarge", "c7i.xlarge", "c8a.xlarge", "c6a.xlarge", "c5a.xlarge", "c8i.xlarge"]
 
 #   capacity_type = "SPOT"
 #   update_config {
